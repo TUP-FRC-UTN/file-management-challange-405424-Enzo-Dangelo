@@ -1,0 +1,36 @@
+<form [formGroup]="fileForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="name" class="form-label">Nombre</label>
+      <input type="text" class="form-control" id="name" formControlName="name">
+    </div>
+    <div class="mb-3">
+      <label for="date" class="form-label">Fecha</label>
+      <input type="date" class="form-control" id="date" formControlName="date">
+    </div>
+    <div class="mb-3">
+      <label for="type" class="form-label">Tipo Archivo</label>
+      <select class="form-select" id="type" formControlName="type">
+        <option [value]="FileType.FILE">Archivo</option>
+        <option [value]="FileType.FOLDER">Carpeta</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="parentId" class="form-label">Carpeta</label>
+      <select class="form-select" id="parentId" formControlName="parentId">
+        <option value="">Raíz</option>
+        <option *ngFor="let folder of folders" [value]="folder.id">{{ folder.name }}</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Dueños</label>
+      <div *ngFor="let owner of owners; let i = index">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" [id]="'owner' + i" [value]="owner" (change)="onOwnerChange($event, owner)">
+          <label class="form-check-label" [for]="'owner' + i">
+            {{ owner.name }}
+          </label>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="fileForm.invalid">Guardar</button>
+  </form>

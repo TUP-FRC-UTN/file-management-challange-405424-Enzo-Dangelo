@@ -5,6 +5,7 @@ export interface FileItem {
   owners: FileOwner[];
   type: FileType;
   parentId?: string;
+  selected?: boolean;
 }
 
 export interface FileOwner {

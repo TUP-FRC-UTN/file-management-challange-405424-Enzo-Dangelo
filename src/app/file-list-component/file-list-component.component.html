@@ -1,0 +1,44 @@
+<div class="container">
+    <h2>Archivos</h2>
+    <div class="d-flex justify-content-end mb-3">
+      <div class="btn-group">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          Acciones
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#" (click)="showForm = !showForm">{{ showForm ? 'Cancelar' : 'Nuevo' }}</a></li>
+          <li><a class="dropdown-item" href="#" (click)="onDeleteAction()">Borrar</a></li>
+        </ul>
+      </div>
+    </div>
+  
+    <app-file-form-component *ngIf="showForm" (fileAdded)="onFileAdded()"></app-file-form-component>
+  
+    <table class="table">
+      <thead>
+        <tr>
+          <th><input type="checkbox" (change)="toggleAllSelection($event)"></th>
+          <th>Nombre</th>
+          <th>Fecha</th>
+          <th>Dueños</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of sortedItems">
+          <td><input type="checkbox" [(ngModel)]="item.selected"></td>
+          <td>
+            <i [class]="item.type === FileType.FOLDER ? 'bi bi-folder' : 'bi bi-file'"></i>
+            <span [title]="item.name">{{ item.name | truncate:10 }}</span>
+          </td>
+          <td>{{ item.creation | date:'mediumDate' }}</td>
+          <td>
+            <div class="owner-avatars">
+              <img *ngFor="let owner of item.owners.slice(0, 3)" [src]="owner.avatarUrl" [alt]="owner.name" class="avatar">
+              <span *ngIf="item.owners.length > 3" class="avatar more-owners">+{{ item.owners.length - 3 }}</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
