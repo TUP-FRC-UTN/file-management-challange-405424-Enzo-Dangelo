@@ -1,0 +1,70 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1>Archivos</h1>
+
+        <div class="btn-group">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              Acciones
+          </button>
+
+          <ul class="dropdown-menu">
+              <li><a class="dropdown-item" (click)="toggleFormulario()">Nuevo</a></li>
+              <li><a class="dropdown-item" (click)="borrar()">Borrar</a></li>
+          </ul>
+        </div>
+      
+
+    </div>
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Dueños</th>
+          </tr>
+        </thead>
+        <tbody>
+            @for (item of fileItems; track $index) {
+              <tr [class.selected]="isSelected(item)">
+                <th>
+                  <input type="checkbox" 
+                         [checked]="isSelected(item)" 
+                         (change)="toggleSelection(item)">
+                </th>
+                <td>
+                    <i class="bi" [ngClass]="{'bi-file-earmark': item.type === FileTypes.FILE, 'bi-folder': item.type === FileTypes.FOLDER}"></i>
+                    <span [title]="item.name">
+                        {{ item.name.length > 10 ? (item.name | slice:0:10) + '...' : item.name }}
+                    </span>
+                </td>
+                <td>{{ item.creation | date: 'MMM d, yyyy' }}</td>
+                <td>
+                  <div class="owner-container">
+                    @if (item.owners.length > 3) {
+                      @for (owner of item.owners.slice(0, 3); track $index) {
+                        <img [src]="owner.avatarUrl" [alt]="owner.name" class="owner-avatar" />
+                      }
+                      <div class="remaining-owners">
+                        +{{ item.owners.length - 3 }}
+                      </div>
+                    }
+                    @else {
+                      @for (owner of item.owners; track $index) {
+                        <img [src]="owner.avatarUrl" [alt]="owner.name" class="owner-avatar" />
+                      }
+                    }
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+      </table>
+</div>
+
+<div class="container">
+  @if (mostrarFormulario) {
+    <app-form (cerrarFormulario)="ocultarFormulario()"></app-form>
+  }
+</div>

@@ -1,0 +1,72 @@
+<form>
+    <div class="form-row">
+      <div class="col-md-6 mb-3">
+        <label for="nombreInput" class="form-label">Nombre</label>
+        <input type="text" class="form-control" id="nombreInput" [(ngModel)]="name" name="name" placeholder="Nombre del archivo o carpeta">
+      </div>
+    
+      <div class="col-md-6 mb-3">
+        <label for="fechaInput" class="form-label">Fecha</label>
+        <input type="date" class="form-control" id="fechaInput" [(ngModel)]="creation" name="creation">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="col-md-6 mb-3">
+        <label for="tipoArchivo" class="form-label">Tipo de Archivo</label>
+        <select class="form-select" id="tipoArchivo" aria-label="Seleccionar tipo de archivo" [(ngModel)]="selectedTipo" name="tipoArchivo">
+          <option [ngValue]="null" disabled>Seleccionar tipo</option>
+          <option [ngValue]="fileType.FILE">Archivo</option>
+          <option [ngValue]="fileType.FOLDER">Carpeta</option>
+        </select>
+      </div>
+  
+      <div class="col-md-6 mb-3">
+        <label for="carpeta" class="form-label">Carpeta</label>
+        <select class="form-select" id="carpeta" aria-label="Seleccionar carpeta">
+          <option selected disabled>Seleccionar carpeta</option>
+          @for (item of fileItem; track $index) {
+            @if (item.type === fileType.FOLDER) {
+              <option [ngValue]="item">{{ item.name }}</option>
+            }
+          }
+        </select>
+      </div>
+    </div>
+  
+    <div class="form-row">
+      <div class="col-md-6 mb-3">
+        <label for="duenios" class="form-label">Dueños</label>
+        <div class="input-group">
+          <select class="form-select" aria-label="Seleccionar dueño" [(ngModel)]="selectedDuenio[0]" name="duenios">
+            @for (own of fileOwner; track $index) {
+              <option [ngValue]="own">{{ own.name }}</option>
+            }
+          </select>
+          <div class="input-group-append">
+            <button type="button" class="btn btn-outline-secondary" (click)="agregarDuenio()">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label for="dueniosAdicionales" class="form-label">Dueños adicionales</label>
+        @for (num of cantDuenios; track $index) {
+          <select class="form-select mb-2" [(ngModel)]="selectedDuenio[$index + 1]" name="duenios{{$index + 1}}">
+            @for (own of fileOwner; track $index) {
+              <option [ngValue]="own">{{ own.name }}</option>
+            }
+          </select>
+        }
+      </div>
+    </div>
+  
+
+    <div class="form-row">
+      <div class="col-md-6 d-flex justify-content-between">
+        <button (click)="volver()" type="button" class="btn btn-secondary">Volver</button>
+        <button (click)="guardar()" type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+</form>
+  
